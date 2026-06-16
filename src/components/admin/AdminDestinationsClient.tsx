@@ -19,19 +19,39 @@ export function AdminDestinationsClient() {
   const [editingDestination, setEditingDestination] =
     useState<Destination | null>(null);
 
-  const refreshDestinations = () => setDestinations(listAdminDestinations());
+  const refreshDestinations = async () => {
+    try {
+      const response = await fetch("/api/dev/destinations");
+      if (!response.ok) throw new Error("Turso dev API unavailable");
+
+      const data = (await response.json()) as { destinations: Destination[] };
+      setDestinations(data.destinations);
+    } catch {
+      setDestinations(listAdminDestinations());
+    }
+  };
 
   useEffect(() => {
-    refreshDestinations();
+    void refreshDestinations();
   }, []);
 
   const startCreate = () =>
     setEditingDestination(createAdminDestinationDraft());
 
-  const handleDelete = (id: string) => {
-    deleteAdminDestination(id);
-    refreshDestinations();
-    toast.success("Destination removed locally");
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`/api/dev/destinations/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Turso delete unavailable");
+
+      await refreshDestinations();
+      toast.success("Destination removed from Turso");
+    } catch {
+      deleteAdminDestination(id);
+      await refreshDestinations();
+      toast.success("Destination removed locally");
+    }
   };
 
   return (
@@ -97,9 +117,9 @@ export function AdminDestinationsClient() {
       <DestinationForm
         destination={editingDestination}
         onCancel={() => setEditingDestination(null)}
-        onSaved={() => {
+        onSaved={async () => {
           setEditingDestination(null);
-          refreshDestinations();
+          await refreshDestinations();
         }}
       />
     </div>
@@ -113,7 +133,7 @@ function DestinationForm({
 }: {
   destination: Destination | null;
   onCancel: () => void;
-  onSaved: () => void;
+  onSaved: () => Promise<void>;
 }) {
   const [draft, setDraft] = useState<Destination | null>(destination);
 
@@ -132,11 +152,29 @@ function DestinationForm({
   const updateDraft = (updates: Partial<Destination>) =>
     setDraft({ ...draft, ...updates });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    saveAdminDestination(draft);
-    toast.success("Destination saved locally");
-    onSaved();
+
+    const destination = {
+      ...draft,
+      slug: draft.slug || draft.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || draft.id,
+    };
+
+    try {
+      const response = await fetch("/api/dev/destinations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(destination),
+      });
+      if (!response.ok) throw new Error("Turso save unavailable");
+
+      toast.success("Destination saved to Turso");
+    } catch {
+      saveAdminDestination(destination);
+      toast.success("Destination saved locally");
+    }
+
+    await onSaved();
   };
 
   return (
@@ -150,6 +188,11 @@ function DestinationForm({
           label="Name"
           value={draft.name}
           onChange={(value) => updateDraft({ name: value })}
+        />
+        <Field
+          label="Slug"
+          value={draft.slug ?? ""}
+          onChange={(value) => updateDraft({ slug: value })}
         />
         <Field
           label="Country"

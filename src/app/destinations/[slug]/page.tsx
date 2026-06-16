@@ -7,6 +7,10 @@ import {
   getRelatedDestinations,
 } from "@/lib/data";
 import {
+  getTursoDestinationBySlug,
+  listTursoDestinations,
+} from "@/lib/repositories";
+import {
   createDestinationJsonLd,
   getDestinationUrl,
   siteConfig,
@@ -18,14 +22,40 @@ interface DestinationPageProps {
   };
 }
 
-export function generateStaticParams() {
-  return destinations
-    .filter((destination) => destination.slug)
-    .map((destination) => ({ slug: destination.slug }));
+async function getCatalogDestinationBySlug(slug: string) {
+  try {
+    return (await getTursoDestinationBySlug(slug)) ?? getDestinationBySlug(slug);
+  } catch {
+    return getDestinationBySlug(slug);
+  }
 }
 
-export function generateMetadata({ params }: DestinationPageProps): Metadata {
-  const destination = getDestinationBySlug(params.slug);
+async function getRelatedCatalogDestinations(slug: string) {
+  try {
+    const tursoDestinations = await listTursoDestinations();
+    return tursoDestinations.filter((destination) => destination.slug !== slug).slice(0, 3);
+  } catch {
+    return getRelatedDestinations(slug);
+  }
+}
+
+export async function generateStaticParams() {
+  try {
+    const tursoDestinations = await listTursoDestinations();
+    return tursoDestinations
+      .filter((destination) => destination.slug)
+      .map((destination) => ({ slug: destination.slug! }));
+  } catch {
+    return destinations
+      .filter((destination) => destination.slug)
+      .map((destination) => ({ slug: destination.slug }));
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: DestinationPageProps): Promise<Metadata> {
+  const destination = await getCatalogDestinationBySlug(params.slug);
 
   if (!destination) {
     return {
@@ -62,8 +92,8 @@ export function generateMetadata({ params }: DestinationPageProps): Metadata {
   };
 }
 
-export default function DestinationPage({ params }: DestinationPageProps) {
-  const destination = getDestinationBySlug(params.slug);
+export default async function DestinationPage({ params }: DestinationPageProps) {
+  const destination = await getCatalogDestinationBySlug(params.slug);
 
   if (!destination) {
     notFound();
@@ -79,7 +109,7 @@ export default function DestinationPage({ params }: DestinationPageProps) {
       />
       <DestinationDetail
         destination={destination}
-        relatedDestinations={getRelatedDestinations(params.slug)}
+        relatedDestinations={await getRelatedCatalogDestinations(params.slug)}
       />
     </>
   );

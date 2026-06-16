@@ -42,6 +42,26 @@ function mapDestination(
   };
 }
 
+function toDestinationRow(destination: Destination): typeof schema.destinations.$inferInsert {
+  return {
+    id: destination.id,
+    slug: destination.slug ?? destination.id,
+    name: destination.name,
+    country: destination.country,
+    region: destination.region ?? null,
+    image: destination.image,
+    gallery: destination.gallery ?? [],
+    price: destination.price,
+    rating: destination.rating,
+    reviews: destination.reviews,
+    description: destination.description ?? null,
+    amenities: destination.amenities ?? [],
+    highlights: destination.highlights ?? [],
+    duration: destination.duration ?? null,
+    bestTimeToVisit: destination.bestTimeToVisit ?? null,
+  };
+}
+
 function mapDeal(row: typeof schema.deals.$inferSelect): Deal {
   return {
     id: row.id,
@@ -111,6 +131,39 @@ export async function getTursoDestinationBySlug(
     .limit(1);
 
   return rows[0] ? mapDestination(rows[0]) : undefined;
+}
+
+export async function saveTursoDestination(destination: Destination, database?: TursoDatabase) {
+  const row = toDestinationRow(destination);
+  await getDb(database)
+    .insert(schema.destinations)
+    .values(row)
+    .onConflictDoUpdate({
+      target: schema.destinations.id,
+      set: {
+        slug: row.slug,
+        name: row.name,
+        country: row.country,
+        region: row.region,
+        image: row.image,
+        gallery: row.gallery,
+        price: row.price,
+        rating: row.rating,
+        reviews: row.reviews,
+        description: row.description,
+        amenities: row.amenities,
+        highlights: row.highlights,
+        duration: row.duration,
+        bestTimeToVisit: row.bestTimeToVisit,
+        updatedAt: new Date().toISOString(),
+      },
+    });
+
+  return destination;
+}
+
+export async function deleteTursoDestination(id: string, database?: TursoDatabase) {
+  await getDb(database).delete(schema.destinations).where(eq(schema.destinations.id, id));
 }
 
 export async function listTursoDeals(database?: TursoDatabase) {
