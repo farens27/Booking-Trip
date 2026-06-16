@@ -1,194 +1,162 @@
-# 🌍 TripExplorer - Travel Booking Landing Page
+# TripExplorer
 
-A modern, interactive travel booking landing page built with Next.js 14, featuring a stunning Green & Emerald color theme inspired by nature and eco-tourism.
+TripExplorer is a Next.js travel booking preview app. It includes a full local-first travel flow, admin preview tools, testing, SEO hardening, and code-prep for a future Turso database + Zeabur deployment.
 
-![TripExplorer](https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80)
+## Features
 
----
+- Charcoal + Lime responsive UI with dark mode
+- Search page with destination filters and sorting
+- Destination detail pages with gallery, reviews, favorites, and booking CTA
+- Booking quote builder with add-ons and checkout preview
+- Local dashboard for bookings, favorites, reviews, and booking status
+- Local booking cancellation/restoration preview
+- Verified local reviews tied to mock booking confirmations
+- Public admin preview routes for destinations, deals, bookings, newsletter, and data backup
+- Local auth simulation with User/Admin roles and guard notices
+- Local data export/import/reset manager
+- SEO foundation with metadata, Open Graph, Twitter cards, sitemap, robots, and JSON-LD
+- App-level loading, error, and not-found states
+- Security headers in Next config
+- Vitest coverage for core helpers and repository contracts
+- DB-ready repository interfaces with localStorage and Turso skeleton implementations
+- Turso/Drizzle schema and Zeabur deployment config prepared, but not connected yet
 
-## ✨ Features
+## Tech Stack
 
-### 🎯 Core Sections
-- **Hero Section** - Full-screen hero with integrated search form (destination, dates, guests)
-- **Popular Destinations** - Grid showcase of 6 stunning destinations with ratings and pricing
-- **Hot Deals** - Limited-time promotions with countdown timers and discount badges
-- **Testimonials** - Customer reviews with star ratings and trip destinations
-- **Newsletter** - Email subscription for travel tips and exclusive deals
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lucide React
+- Sonner
+- Vitest
+- Drizzle ORM
+- Turso/libSQL client
+- Zeabur config
 
-### 🎨 Design
-- **Responsive Design** - Mobile-first approach, works on all devices
-- **Smooth Animations** - Framer Motion powered interactions
-- **Modern UI** - Clean, accessible components with ShadCN UI
-- **Custom Color Theme** - Nature-inspired Green & Emerald palette
-
-### 🔧 Functionality
-- **Search Form** - Filter trips by destination, dates, and guest count
-- **Interactive Cards** - Hover effects, zoom animations, and transitions
-- **Dynamic Deal Countdown** - Real-time days remaining calculation
-- **Mobile Navigation** - Hamburger menu with smooth animations
-
----
-
-## 🛠️ Tech Stack
-
-| Technology | Purpose |
-|------------|---------|
-| [Next.js 14](https://nextjs.org/) | React framework with App Router |
-| [TypeScript](https://www.typescriptlang.org/) | Type-safe JavaScript |
-| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
-| [ShadCN UI](https://ui.shadcn.com/) | Re-usable component library |
-| [Framer Motion](https://www.framer.com/motion/) | Animation library |
-| [Lucide Icons](https://lucide.dev/) | Beautiful open-source icons |
-
----
-
-## 🎨 Color Palette
-
-### Green & Emerald Theme (Nature-Inspired)
-
-| Color | Hex | Usage |
-|-------|-----|-------|
-| Green | `#22c55e` | Primary buttons, accents |
-| Emerald | `#10b981` | Secondary accents, gradients |
-| Gradient | `#22c55e → #10b981` | CTAs, hero elements |
-
-### Alternative Themes Available
-- 🔵 **Blue & Teal** - Ocean & sky vibes (beach destinations)
-- 🟠 **Orange & Coral** - Warm & adventurous (exotic travel)
-- 🟣 **Purple & Violet** - Luxurious & elegant (premium travel)
-
----
-
-## 📁 Project Structure
-
-```
-src/
-├── app/
-│   ├── layout.tsx          # Root layout with Navbar & Footer
-│   ├── page.tsx            # Main landing page
-│   └── globals.css         # Global styles & CSS variables
-│
-├── components/
-│   ├── ui/                 # ShadCN UI components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   └── label.tsx
-│   │
-│   ├── layout/             # Layout components
-│   │   ├── Navbar.tsx
-│   │   └── Footer.tsx
-│   │
-│   ├── hero/               # Hero section
-│   │   └── HeroSection.tsx
-│   │
-│   ├── destinations/       # Destinations showcase
-│   │   ├── DestinationsSection.tsx
-│   │   └── DestinationCard.tsx
-│   │
-│   ├── promotions/         # Deals & promotions
-│   │   ├── PromotionsSection.tsx
-│   │   └── DealCard.tsx
-│   │
-│   ├── testimonials/       # Customer reviews
-│   │   ├── TestimonialsSection.tsx
-│   │   └── TestimonialCard.tsx
-│   │
-│   └── newsletter/         # Newsletter signup
-│       └── NewsletterSection.tsx
-│
-├── lib/
-│   ├── utils.ts            # Utility functions (cn helper)
-│   └── data.ts             # Mock data for destinations, deals, testimonials
-│
-└── types/
-    └── index.ts            # TypeScript interfaces
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+ installed
-- npm or yarn package manager
-
-### Installation
+## Local Development
 
 ```bash
-# Clone the repository
-git clone https://github.com/farens27/Booking-Trip.git
-
-# Navigate to project directory
-cd Booking-Trip
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Open the URL shown by Next.js, usually:
 
----
+```txt
+http://localhost:3000
+```
 
-## 📦 Scripts
+If port 3000 is busy, Next.js may start on another port such as 3001.
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
+## Available Scripts
 
----
+```bash
+npm run dev           # Start development server
+npm run build         # Production build
+npm run start         # Start production server
+npm run lint          # Next.js lint
+npm run typecheck     # TypeScript check
+npm test              # Run Vitest tests
+npm run test:watch    # Run Vitest in watch mode
+npm run format        # Format files with Prettier
+npm run format:check  # Check formatting
+npm run db:generate   # Generate Drizzle migrations when DB setup is ready
+npm run db:push       # Push Drizzle schema when DB setup is ready
+```
 
-## 🌐 Live Sections
+## Main Routes
 
-| Section | Description |
-|---------|-------------|
-| **Hero** | Search form with destination, dates, guests |
-| **Destinations** | 6 popular destinations with pricing & ratings |
-| **Deals** | 4 limited-time offers with discount badges |
-| **Testimonials** | 4 customer reviews with ratings |
-| **Newsletter** | Email subscription form |
+- `/` — landing page
+- `/search` — destination search
+- `/destinations/[slug]` — destination detail
+- `/book/[slug]` — quote builder
+- `/checkout` — checkout preview
+- `/dashboard` — local traveler dashboard
+- `/dashboard/bookings/[confirmationNumber]` — booking detail
+- `/admin` — admin overview
+- `/admin/destinations` — local destination CRUD
+- `/admin/deals` — local deals CRUD
+- `/admin/bookings` — mock bookings view
+- `/admin/newsletter` — newsletter subscriber view
+- `/admin/data` — local data export/import/reset
 
----
+## Local Preview Data
 
-## 📱 Responsive Breakpoints
+Most app state is currently browser-local via localStorage. This is intentional until the real database phase.
 
-- **Mobile**: < 640px
-- **Tablet**: 640px - 1024px
-- **Desktop**: > 1024px
+Local preview data includes:
 
----
+- auth simulation session
+- booking quote
+- confirmed/cancelled mock bookings
+- favorite destinations
+- reviews
+- newsletter subscribers
+- admin destination/deal overrides
 
-## 🔮 Future Enhancements
+Use `/admin/data` to export, import, or reset local preview data.
 
-- [ ] Add actual booking functionality
-- [ ] Integrate with travel API for real data
-- [ ] Add user authentication
-- [ ] Implement dark mode toggle
-- [ ] Add more destination categories
-- [ ] Multi-language support
+## Auth Status
 
----
+The app currently uses local auth simulation only:
 
-## 📄 License
+- Demo User
+- Demo Admin
+- role switcher
+- sign out
 
-This project is open source and available under the [MIT License](LICENSE).
+This is not real security. Real auth provider setup is planned for a later phase.
 
----
+## Database Preparation
 
-## 👤 Author
+The project is prepared for Turso/libSQL with Drizzle, but the live database is not connected yet.
 
-Built with ❤️ for travelers around the world.
+Prepared files:
 
----
+- `src/db/schema.ts` — Drizzle schema draft
+- `src/db/client.ts` — Turso client factory
+- `drizzle.config.ts` — Drizzle Kit config
+- `src/lib/repositories/types.ts` — repository interfaces
+- `src/lib/repositories/local.ts` — active localStorage implementation
+- `src/lib/repositories/turso.ts` — Turso repository skeleton
 
-## 🙏 Acknowledgments
+Required environment variables for the real Turso phase:
 
-- [Unsplash](https://unsplash.com/) for beautiful travel images
-- [ShadCN](https://ui.shadcn.com/) for the amazing component library
-- [Framer Motion](https://www.framer.com/motion/) for smooth animations
+```env
+DATABASE_URL="libsql://your-database-name.turso.io"
+TURSO_AUTH_TOKEN="your-turso-auth-token"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
+
+See `.env.example` for placeholders.
+
+## Deployment Preparation
+
+The project includes `zeabur.json` for a future Zeabur deployment.
+
+Current deployment prep is code-only:
+
+- no cloud project was created
+- no credentials were added
+- no database migrations were pushed
+- no deployment was triggered
+
+When ready, configure environment variables in Zeabur and deploy from Git.
+
+## Validation
+
+Before pushing or deploying, run:
+
+```bash
+npm test
+npm run lint
+npm run typecheck
+npm run format:check
+npm run build
+```
+
+## Current Status
+
+The app is production-buildable and local-first. The next major phase is real Turso setup, Drizzle migration execution, and gradual repository switching from localStorage to database-backed reads/writes.

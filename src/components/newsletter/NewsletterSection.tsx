@@ -1,30 +1,47 @@
 "use client";
 
+import { useState } from "react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Mail, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { addNewsletterSubscriber } from "@/lib/newsletter";
 
 export function NewsletterSection() {
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Newsletter signup:", email);
+
+    const result = addNewsletterSubscriber(email);
+
+    if (result.status === "duplicate") {
+      toast.info("You're already subscribed locally", {
+        description:
+          "This email already exists in the admin newsletter preview.",
+      });
+    } else {
+      toast.success("You're on the local early list", {
+        description:
+          "Saved in this browser. Email delivery connects in a later phase.",
+      });
+    }
+
     setEmail("");
-    // Add success notification here
   };
 
   return (
-    <section id="contact" className="py-20 gradient-sunset relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3" />
+    <section
+      id="contact"
+      className="gradient-primary relative overflow-hidden py-20"
+    >
+      <div className="absolute inset-0 opacity-10" aria-hidden="true">
+        <div className="absolute left-0 top-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 translate-x-1/3 translate-y-1/3 rounded-full bg-white" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -32,27 +49,26 @@ export function NewsletterSection() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full mb-6">
-            <Mail className="w-5 h-5" />
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-white">
+            <Mail className="h-5 w-5" />
             <span className="font-semibold">Newsletter</span>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
             Get Travel Tips & Deals
           </h2>
-          <p className="text-white/80 max-w-xl mx-auto mb-8">
-            Subscribe to our newsletter and be the first to know about exclusive deals,
-            new destinations, and travel inspiration.
+          <p className="mx-auto mb-8 max-w-xl text-white/80">
+            Subscribe to our newsletter and be the first to know about exclusive
+            deals, new destinations, and travel inspiration.
           </p>
 
-          {/* Newsletter Form */}
           <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+            className="mx-auto flex max-w-md flex-col gap-4 sm:flex-row"
           >
             <Input
               type="email"
@@ -60,19 +76,20 @@ export function NewsletterSection() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="flex-1 bg-white/95 border-0 focus:ring-2 focus:ring-white/50"
+              aria-label="Email address"
+              className="flex-1 border-0 bg-white/95 text-charcoal-950 focus-visible:ring-white/70"
             />
             <Button
               type="submit"
               size="lg"
-              className="bg-white text-primary hover:bg-gray-100 transition-colors px-8"
+              className="bg-white px-8 text-primary hover:bg-lime-50"
             >
               Subscribe
-              <Send className="w-4 h-4 ml-2" />
+              <Send className="ml-2 h-4 w-4" />
             </Button>
           </motion.form>
 
-          <p className="text-white/60 text-sm mt-4">
+          <p className="mt-4 text-sm text-white/60">
             No spam, unsubscribe at any time.
           </p>
         </motion.div>

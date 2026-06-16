@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Plane } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, Plane, X } from "lucide-react";
+import { AuthStatus } from "@/components/auth/AuthStatus";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const navLinks = [
   { href: "#destinations", label: "Destinations" },
@@ -20,80 +23,140 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100"
+      className="fixed left-0 right-0 top-0 z-50 border-b border-border/70 bg-background/85 shadow-sm backdrop-blur-xl"
+      aria-label="Primary navigation"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full gradient-sunset flex items-center justify-center">
-              <Plane className="w-5 h-5 text-white" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link
+            href="/"
+            className="flex items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-label="TripExplorer home"
+          >
+            <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-full shadow-lg shadow-primary/20">
+              <Plane className="h-5 w-5 text-white" aria-hidden="true" />
             </div>
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-xl font-bold text-foreground">
               Trip<span className="text-primary">Explorer</span>
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 hover:text-primary transition-colors font-medium"
+                className="rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            <Button variant="ghost" className="text-gray-600">
-              Sign In
-            </Button>
-            <Button className="gradient-sunset text-white hover:opacity-90 transition-opacity">
-              Get Started
-            </Button>
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
+            <AuthStatus />
+            <Link
+              href="/dashboard"
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                "text-muted-foreground hover:text-primary"
+              )}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/admin"
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                "text-muted-foreground hover:text-primary"
+              )}
+            >
+              Admin
+            </Link>
+            <Link
+              href="/dashboard"
+              className={cn(
+                buttonVariants(),
+                "gradient-primary gradient-primary-hover text-white shadow-lg shadow-primary/20"
+              )}
+            >
+              My Trips
+            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-gray-600"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="min-h-11 min-w-11 rounded-lg p-2 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-gray-100"
+            className="border-b border-border bg-background md:hidden"
           >
-            <div className="px-4 py-4 space-y-4">
+            <div className="space-y-4 px-4 py-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block text-gray-600 hover:text-primary transition-colors font-medium"
+                  className="block min-h-11 rounded-md py-3 font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-4 space-y-2">
-                <Button variant="ghost" className="w-full justify-start">
-                  Sign In
-                </Button>
-                <Button className="w-full gradient-sunset text-white">
-                  Get Started
-                </Button>
+              <div className="space-y-2 border-t border-border pt-4">
+                <AuthStatus />
+                <Link
+                  href="/dashboard"
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "w-full justify-start text-muted-foreground"
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/admin"
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "w-full justify-start text-muted-foreground"
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Admin
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className={cn(
+                    buttonVariants(),
+                    "gradient-primary gradient-primary-hover w-full text-white"
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  My Trips
+                </Link>
               </div>
             </div>
           </motion.div>

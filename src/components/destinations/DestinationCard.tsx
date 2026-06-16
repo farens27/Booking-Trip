@@ -1,9 +1,12 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Destination } from "@/types";
-import { Button } from "@/components/ui/button";
 
 interface DestinationCardProps {
   destination: Destination;
@@ -21,52 +24,65 @@ const cardVariants = {
 };
 
 export function DestinationCard({ destination }: DestinationCardProps) {
+  const detailHref = `/destinations/${destination.slug ?? destination.id}`;
+
   return (
     <motion.div
       variants={cardVariants}
       whileHover={{ y: -8 }}
-      className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+      className="group overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-lg shadow-charcoal-950/5 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10"
     >
-      {/* Image */}
       <div className="relative h-56 overflow-hidden">
-        <img
+        <Image
           src={destination.image}
-          alt={destination.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          alt={`${destination.name}, ${destination.country}`}
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-        {/* Rating Badge */}
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
-          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-          <span className="text-sm font-semibold text-gray-900">{destination.rating}</span>
+        <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-charcoal-900 backdrop-blur-sm">
+          <Star className="h-4 w-4 fill-accent text-accent" />
+          <span className="text-sm font-semibold">{destination.rating}</span>
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-5">
-        <div className="flex items-center gap-1 text-gray-500 mb-2">
-          <MapPin className="w-4 h-4 text-primary" />
+        <div className="mb-2 flex items-center gap-1 text-muted-foreground">
+          <MapPin className="h-4 w-4 text-primary" />
           <span className="text-sm">{destination.country}</span>
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-2">{destination.name}</h3>
+        <h3 className="mb-2 text-xl font-bold text-foreground">
+          {destination.name}
+        </h3>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{destination.description}</p>
+        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
+          {destination.description}
+        </p>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <div>
-            <span className="text-sm text-gray-500">From</span>
-            <div className="text-2xl font-bold text-primary">${destination.price}</div>
+            <span className="text-sm text-muted-foreground">From</span>
+            <div className="text-2xl font-bold text-primary">
+              ${destination.price}
+            </div>
           </div>
-          <div className="text-sm text-gray-500">{destination.reviews.toLocaleString()} reviews</div>
+          <div className="text-right text-sm text-muted-foreground">
+            {destination.reviews.toLocaleString()} reviews
+          </div>
         </div>
 
-        <Button
-          className="w-full mt-4 gradient-sunset text-white hover:opacity-90 transition-opacity"
+        <Link
+          href={detailHref}
+          className={cn(
+            buttonVariants(),
+            "gradient-primary gradient-primary-hover mt-4 w-full text-white shadow-md shadow-primary/20"
+          )}
         >
           Explore Now
-        </Button>
+        </Link>
       </div>
     </motion.div>
   );

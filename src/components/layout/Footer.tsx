@@ -1,5 +1,14 @@
 import Link from "next/link";
-import { Plane, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Plane,
+  Twitter,
+  Youtube,
+} from "lucide-react";
 
 const footerLinks = {
   company: [
@@ -31,46 +40,50 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Brand Section */}
+    <footer className="bg-charcoal-950 text-white">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full gradient-sunset flex items-center justify-center">
-                <Plane className="w-5 h-5 text-white" />
+            <Link
+              href="/"
+              className="mb-4 flex items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-950"
+            >
+              <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-full">
+                <Plane className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold">
                 Trip<span className="text-primary">Explorer</span>
               </span>
             </Link>
-            <p className="text-gray-400 mb-6 max-w-sm">
-              Discover your next adventure with TripExplorer. We offer curated travel experiences
-              to the world&apos;s most stunning destinations.
+            <p className="mb-6 max-w-sm text-charcoal-400">
+              Discover your next adventure with TripExplorer. We offer curated
+              travel experiences to the world&apos;s most stunning destinations.
             </p>
             <div className="space-y-2">
-              <div className="flex items-center gap-3 text-gray-400">
-                <Mail className="w-5 h-5" />
+              <div className="flex items-center gap-3 text-charcoal-400">
+                <Mail className="h-5 w-5 text-primary" />
                 <span>hello@tripexplorer.com</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-400">
-                <Phone className="w-5 h-5" />
+              <div className="flex items-center gap-3 text-charcoal-400">
+                <Phone className="h-5 w-5 text-primary" />
                 <span>+1 (555) 123-4567</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-400">
-                <MapPin className="w-5 h-5" />
+              <div className="flex items-center gap-3 text-charcoal-400">
+                <MapPin className="h-5 w-5 text-primary" />
                 <span>San Francisco, CA</span>
               </div>
             </div>
           </div>
 
-          {/* Company Links */}
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
+            <h3 className="mb-4 font-semibold">Company</h3>
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href={link.href}
+                    className="text-charcoal-400 transition-colors hover:text-white"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -78,13 +91,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Destinations Links */}
           <div>
-            <h3 className="font-semibold mb-4">Destinations</h3>
+            <h3 className="mb-4 font-semibold">Destinations</h3>
             <ul className="space-y-2">
               {footerLinks.destinations.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href={link.href}
+                    className="text-charcoal-400 transition-colors hover:text-white"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -92,13 +107,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Support Links */}
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
+            <h3 className="mb-4 font-semibold">Support</h3>
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-colors">
+                  <Link
+                    href={link.href}
+                    className="text-charcoal-400 transition-colors hover:text-white"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -107,9 +124,8 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-400 text-sm">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-charcoal-800 pt-8 md:flex-row">
+          <p className="text-sm text-charcoal-400">
             &copy; {new Date().getFullYear()} TripExplorer. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
@@ -117,10 +133,10 @@ export function Footer() {
               <Link
                 key={social.label}
                 href={social.href}
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-charcoal-800 text-charcoal-400 transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-950"
                 aria-label={social.label}
               >
-                <social.icon className="w-5 h-5" />
+                <social.icon className="h-5 w-5" />
               </Link>
             ))}
           </div>

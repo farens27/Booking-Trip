@@ -1,10 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Clock, ArrowRight } from "lucide-react";
-import { Deal } from "@/types";
+import { ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { Deal } from "@/types";
 
 interface DealCardProps {
   deal: Deal;
@@ -27,7 +28,9 @@ export function DealCard({ deal }: DealCardProps) {
   useEffect(() => {
     const days = Math.max(
       0,
-      Math.ceil((new Date(deal.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+      Math.ceil(
+        (new Date(deal.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+      )
     );
     setDaysLeft(days);
   }, [deal.endDate]);
@@ -36,43 +39,46 @@ export function DealCard({ deal }: DealCardProps) {
     <motion.div
       variants={cardVariants}
       whileHover={{ y: -5 }}
-      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
+      className="group relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-lg shadow-charcoal-950/5 transition-all duration-300 hover:shadow-2xl hover:shadow-accent/10"
     >
-      {/* Discount Badge */}
-      <div className="absolute top-4 left-4 z-10 bg-accent text-white px-3 py-1 rounded-full text-sm font-bold">
+      <div className="gradient-deal absolute left-4 top-4 z-10 rounded-full px-3 py-1 text-sm font-bold text-white shadow-lg">
         {deal.discount}% OFF
       </div>
 
-      {/* Image */}
       <div className="relative h-48 overflow-hidden">
-        <img
+        <Image
           src={deal.image}
-          alt={deal.destination}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          alt={`${deal.destination}, ${deal.country}`}
+          fill
+          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/70 to-transparent" />
 
-        {/* Time Left */}
-        <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 text-white text-sm">
-          <Clock className="w-4 h-4" />
+        <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 text-sm text-white">
+          <Clock className="h-4 w-4" />
           <span>{daysLeft} days left</span>
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-5">
-        <h3 className="text-lg font-bold text-gray-900 mb-1">{deal.destination}</h3>
-        <p className="text-gray-500 text-sm mb-3">{deal.country}</p>
+        <h3 className="mb-1 text-lg font-bold text-foreground">
+          {deal.destination}
+        </h3>
+        <p className="mb-3 text-sm text-muted-foreground">{deal.country}</p>
 
-        {/* Pricing */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-gray-400 line-through">${deal.originalPrice}</span>
-          <span className="text-2xl font-bold text-primary">${deal.discountedPrice}</span>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="text-muted-foreground line-through">
+            ${deal.originalPrice}
+          </span>
+          <span className="text-2xl font-bold text-primary">
+            ${deal.discountedPrice}
+          </span>
         </div>
 
-        <Button className="w-full gradient-sunset text-white hover:opacity-90 transition-opacity group">
+        <Button className="gradient-primary gradient-primary-hover group w-full text-white shadow-md shadow-primary/20">
           Book Now
-          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
       </div>
     </motion.div>
